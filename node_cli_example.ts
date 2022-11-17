@@ -8,13 +8,13 @@ const supportedChains: ChainInfo[] = [
     id: 1,
     symbol: 'ETH',
     label: 'Ethereum',
-    rpcUrl: 'https://mainnet.infura.io/v3/2b6ee06a57eb4bdb8cde82c5357e766e'
+    rpcUrl: ''
   },
   {
     id: 5,
     symbol: 'ETH',
     label: 'Goerli Eth Testnet',
-    rpcUrl: 'https://goerli.infura.io/v3/2b6ee06a57eb4bdb8cde82c5357e766e'
+    rpcUrl: ''
   }
 ]
 
