@@ -1,0 +1,21 @@
+{
+  "name": "Eth-Token-Wallet",
+  "version": "1.0.0",
+  "description": "Basic wallet functionality (eth / erc20) on any evm chain",
+  "main": "index.js",
+  "repository": "https://github.com/elmutt/Eth-Token-Wallet.git",
+  "author": "<elmutt@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "eth_mnemonic_signer": "^1.0.2",
+    "ethers": "^5.7.2",
+    "node-localstorage": "^2.2.1",
+    "readline-sync": "^1.4.10",
+    "web3": "^1.8.1"
+  },
+  "scripts": {
+    "build": "tsc index.ts example.ts --outDir dist",
+    "example": "yarn && yarn build && node ./dist/example.js"
+  }
+}
