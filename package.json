@@ -15,7 +15,7 @@
     "web3": "^1.8.1"
   },
   "scripts": {
-    "build": "tsc index.ts example.ts --outDir dist",
-    "example": "yarn && yarn build && node ./dist/example.js"
+    "build": "tsc index.ts node_cli_example.ts --outDir dist",
+    "example": "yarn && yarn build && node ./dist/node_cli_example.js"
   }
 }
