@@ -1,5 +1,5 @@
 {
-  "name": "Eth-Token-Wallet",
+  "name": "eth-token-wallet",
   "version": "1.0.0",
   "description": "Basic wallet functionality (eth / erc20) on any evm chain",
   "main": "./dist/index.js",
