@@ -2,7 +2,7 @@
   "name": "Eth-Token-Wallet",
   "version": "1.0.0",
   "description": "Basic wallet functionality (eth / erc20) on any evm chain",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "repository": "https://github.com/elmutt/Eth-Token-Wallet.git",
   "author": "<elmutt@gmail.com>",
   "license": "MIT",
