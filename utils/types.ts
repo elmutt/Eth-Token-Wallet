@@ -10,4 +10,7 @@ export type ChainInfo = {
     symbol: string,
     label: string,
     rpcUrl: string
+    decimals: number
+    explorerAccount: string
+    explorerTx: string
 }

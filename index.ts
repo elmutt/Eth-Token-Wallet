@@ -1,9 +1,8 @@
 import { ChainInfo, StorageAdapter } from "./utils/types"
 import { decrypt, encrypt } from "./utils/encryptionHelpers"
-import { getAddress, EthTx, signTx } from 'eth_mnemonic_signer'
+import { getAddress, EthTx, signTx, validateMnemonic } from 'eth_mnemonic_signer'
 import { erc20Abi } from './utils/erc20Abi'
 import { ethers } from 'ethers'
-import { validateMnemonic } from 'bip39'
 const Web3 = require('web3')
 
 const MNEMONIC_STORAGE_KEY = 'encryptedMnemonic'
@@ -95,7 +94,8 @@ export class TokenWallet {
         if(!this.isStarted()) throw new Error('not started')
         const web3 = this.getWeb3()
         const nonce = await web3.eth.getTransactionCount(await this.getAddress())
-        const gasLimit = 50000
+        const gasLimit = await this.getWeb3().eth.estimateGas({ from: await this.getAddress(), nonce, to, value: Web3.utils.toHex(value) })
+
         const gasPrice = await web3.eth.getGasPrice()
         return {
             to,
@@ -111,20 +111,40 @@ export class TokenWallet {
         if(!this.isStarted()) throw new Error('not started')
         const web3 = this.getWeb3()
         const erc20Contract = new (web3.eth.Contract)(erc20Abi as any, tokenAddress)
-        const erc20TxData = erc20Contract.methods.transfer(to, value).encodeABI()
+        const data = erc20Contract.methods.transfer(to, value).encodeABI()
         const nonce = await web3.eth.getTransactionCount(await this.getAddress())
         const gasPrice = await web3.eth.getGasPrice()
-        const gasLimit = 80000
+
+        const gasLimit = await this.getWeb3().eth.estimateGas({ from: await this.getAddress(), nonce, to: erc20Contract.options.address, data, value: '0x0' })
+
         return {
             to: erc20Contract.options.address,
-            nonce: nonce,
-            data: erc20TxData,
+            nonce,
+            data,
             value: '0x0',
             chainId: parseInt(this.storageAdapter.getValue(CURRENT_CHAINID_KEY)),
             gasLimit,
             gasPrice: Web3.utils.toHex(gasPrice),
           }
         
+    }
+
+    customDataTx = async ({to, value, data}: {to: string, value: string, data: string}) => {
+        if(!this.isStarted()) throw new Error('not started')
+        const web3 = this.getWeb3()
+        const nonce = await web3.eth.getTransactionCount(await this.getAddress())
+        const gasPrice = await web3.eth.getGasPrice()
+        const gasLimit = await this.getWeb3().eth.estimateGas({ from: await this.getAddress(), nonce, to, data, value: Web3.utils.toHex(value) })
+
+        return {
+            to,
+            nonce,
+            data,
+            value: Web3.utils.toHex(value),
+            chainId: parseInt(this.storageAdapter.getValue(CURRENT_CHAINID_KEY)),
+            gasLimit,
+            gasPrice: Web3.utils.toHex(gasPrice),
+          }
     }
 
     erc20Balance = async ({tokenAddress}: {tokenAddress: string}) => {

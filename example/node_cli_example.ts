@@ -1,27 +1,38 @@
-import { TokenWallet } from '.'
-import { NodeLocalStore } from './storageAdapters/NodeLocalStore'
-import { ChainInfo } from './utils/types'
+import { TokenWallet } from '..'
+import { NodeLocalStore } from '../storageAdapters/NodeLocalStore'
+import { ChainInfo } from '../utils/types'
 const readline = require('readline-sync')
 
+// TODO add tokens like chains. tokens belong to chains
 const supportedChains: ChainInfo[] = [
   {
     id: 100,
     symbol: 'XDAI',
     label: 'Gnosis',
-    rpcUrl: 'https://rpc.ankr.com/gnosis'
+    rpcUrl: 'https://rpc.ankr.com/gnosis',
+    decimals: 18,
+    explorerAccount: 'https://blockscout.com/xdai/mainnet/address/',
+    explorerTx: 'https://blockscout.com/xdai/mainnet/tx/'
   },
   {
     id: 5,
     symbol: 'ETH',
     label: 'Goerli Eth Testnet',
-    rpcUrl: ''
+    rpcUrl: '',
+    decimals: 18,
+    explorerAccount: 'https://goerli.etherscan.io/address/',
+    explorerTx: 'https://goerli.etherscan.io/tx/'
+
   },
   {
     id: 1,
     symbol: 'ETH',
     label: 'Ethereum',
-    rpcUrl: ''
-  }
+    rpcUrl: '',
+    decimals: 18,
+    explorerAccount: 'https://etherscan.io/address/',
+    explorerTx: 'https://etherscan.io/tx/'
+}
 ]
 
 const store = new NodeLocalStore('./local_Wallet')
@@ -126,8 +137,8 @@ const sendErc20 = async () => {
 const switchChain = () => {
   console.log('Available Chains:')
   console.log(`${JSON.stringify(wallet.getSupportedChains(), null, 2)}`)
-  const newChainId = readline.question(`Chain Id: `)
-  wallet.switchChain(parseInt(newChainId))
+  const newChainId = parseInt(readline.question(`Chain Id: `))
+  wallet.switchChain(newChainId)
   console.log('Switched Chain')
 }
 
@@ -138,12 +149,16 @@ const editBip44Path = () => {
 }
 
 const addChain = () => {
-  const id = readline.question(`Chain Id: `)
+  const id = parseInt(readline.question(`Chain Id: `))
   const symbol = readline.question(`Symbol: `)
   const label = readline.question(`Label: `)
+  const decimals = parseInt(readline.question(`Decimals: `))
   const rpcUrl = readline.question(`Rpc Url: `)
-  wallet.addChain({ id: parseInt(id), symbol, label, rpcUrl })
-  wallet.switchChain(parseInt(id))
+  const explorerAccount = readline.question(`Explorer Account Url: `)
+  const explorerTx = readline.question(`Explorer Tx Url: `)
+
+  wallet.addChain({ id, symbol, label, rpcUrl, explorerAccount, explorerTx, decimals })
+  wallet.switchChain(id)
   console.log('Chain Added and Switched')
 }
 
