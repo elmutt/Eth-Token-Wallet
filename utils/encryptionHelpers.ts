@@ -13,21 +13,22 @@ export const encrypt = (text, password) => {
   const iv = randomBytes(16)
   const cipher = createCipheriv(algorithm, secretKey, iv)
   const encrypted = Buffer.concat([cipher.update(text), cipher.final()])
-  return {
+  return JSON.stringify({
     iv: iv.toString('hex'),
     content: encrypted.toString('hex')
-  }
+  })
 }
 
-export const decrypt = (encrypted, password) => {
+export const decrypt = (encryptedString, password) => {
+  const encryptedObject = JSON.parse(encryptedString)
   const secretKey = scryptSync(password, salt, 32)
   const decipher = createDecipheriv(
     algorithm,
     secretKey,
-    Buffer.from(encrypted.iv, 'hex')
+    Buffer.from(encryptedObject.iv, 'hex')
   )
   const decrypted = Buffer.concat([
-    decipher.update(Buffer.from(encrypted.content, 'hex')),
+    decipher.update(Buffer.from(encryptedObject.content, 'hex')),
     decipher.final()
   ])
   return decrypted.toString()

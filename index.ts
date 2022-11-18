@@ -1,8 +1,9 @@
 import { ChainInfo, StorageAdapter } from "./utils/types"
-import { decrypt, encrypt } from "./utils/helpers"
+import { decrypt, encrypt } from "./utils/encryptionHelpers"
 import { getAddress, EthTx, signTx } from 'eth_mnemonic_signer'
 import { erc20Abi } from './utils/erc20Abi'
 import { ethers } from 'ethers'
+import { validateMnemonic } from 'bip39'
 const Web3 = require('web3')
 
 const MNEMONIC_STORAGE_KEY = 'encryptedMnemonic'
@@ -24,16 +25,15 @@ export class TokenWallet {
         if(!this.isInitialized()) throw new Error('not initialized')
         const encryptedMnemonic = this.storageAdapter.getValue(MNEMONIC_STORAGE_KEY)
         if(!encryptedMnemonic) throw new Error('mnemonic not found')
-        this.mnemonic = decrypt(JSON.parse(encryptedMnemonic), password)
-
-        if(!this.mnemonic.startsWith('mnemonic ')) throw new Error('incorrect password')
+        this.mnemonic = decrypt(encryptedMnemonic, password)
+        if(!validateMnemonic(this.mnemonic)) throw new Error('incorrect password')
     }
 
     isStarted = () => !!this.mnemonic
 
     initialize = (password: string, mnemonic?: string) => {
         const newMnemonic = !!mnemonic ? mnemonic : ethers.Wallet.createRandom().mnemonic.phrase
-        const encryptedMnemonic = JSON.stringify(encrypt(`mnemonic ${newMnemonic}`, password))
+        const encryptedMnemonic = encrypt(newMnemonic, password)
         this.storageAdapter.setValue(MNEMONIC_STORAGE_KEY, encryptedMnemonic)
         this.start(password)
     }
@@ -67,20 +67,18 @@ export class TokenWallet {
         this.mnemonic = ''
     }
 
-    signAndBroadcast = async (tx: EthTx, onConfirm: () => void): Promise<string> => {
+    signAndBroadcast = async (tx: EthTx): Promise<{txid: string, confirmPromise: Promise<any>}> => {
         if(!this.isStarted() || !this.mnemonic) throw new Error('not started')
         const signedTx = await signTx(tx, this.mnemonic)
-        this.getWeb3().eth.sendSignedTransaction(signedTx).then(() => onConfirm()) // TODO error handling
         const txid = this.getWeb3().utils.sha3(signedTx)
+        const confirmPromise = this.getWeb3().eth.sendSignedTransaction(signedTx)
         if(!txid) throw new Error('no txid')
-        return txid
+        return { txid, confirmPromise }
     }
 
     ethTx = async ({to, value}: {to: string, value: string}) => {
         const web3 = this.getWeb3()
-
         const nonce = await web3.eth.getTransactionCount(await this.getAddress())
-
         const gasLimit = 50000
         const gasPrice = await web3.eth.getGasPrice()
         return {
@@ -95,14 +93,10 @@ export class TokenWallet {
 
     erc20Tx = async ({to, value, tokenAddress}: {to: string, value: string, tokenAddress: string}) => {
         const web3 = this.getWeb3()
-
         const erc20Contract = new (web3.eth.Contract)(erc20Abi as any, tokenAddress)
         const erc20TxData = erc20Contract.methods.transfer(to, value).encodeABI()
-
         const nonce = await web3.eth.getTransactionCount(await this.getAddress())
-
         const gasPrice = await web3.eth.getGasPrice()
-
         const gasLimit = 80000
         return {
             to: erc20Contract.options.address,
@@ -127,7 +121,7 @@ export class TokenWallet {
         return web3.eth.getBalance(await this.getAddress())
     }
 
-    getWeb3() {
+    getWeb3 = () => {
         const chainInfo = this.supportedChains.find( (chainInfo) => chainInfo.id === this.currentChainId )
         if(!chainInfo) throw new Error('no chainInfo')
         const provider = new (Web3.providers.HttpProvider)(chainInfo.rpcUrl)
