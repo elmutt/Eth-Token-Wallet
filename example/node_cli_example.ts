@@ -3,35 +3,19 @@ import { NodeLocalStore } from '../storageAdapters/NodeLocalStore'
 import { ChainInfo } from '../utils/types'
 const readline = require('readline-sync')
 
-// TODO add tokens like chains. tokens belong to chains
 const supportedChains: ChainInfo[] = [
   {
     id: 100,
-    symbol: 'XDAI',
-    label: 'Gnosis',
-    rpcUrl: 'https://rpc.ankr.com/gnosis',
-    decimals: 18,
-    explorerAccount: 'https://blockscout.com/xdai/mainnet/address/',
-    explorerTx: 'https://blockscout.com/xdai/mainnet/tx/'
+    rpcUrl: 'https://rpc.ankr.com/gnosis'
   },
   {
     id: 5,
-    symbol: 'ETH',
-    label: 'Goerli Eth Testnet',
-    rpcUrl: '',
-    decimals: 18,
-    explorerAccount: 'https://goerli.etherscan.io/address/',
-    explorerTx: 'https://goerli.etherscan.io/tx/'
+    rpcUrl: ''
 
   },
   {
     id: 1,
-    symbol: 'ETH',
-    label: 'Ethereum',
-    rpcUrl: '',
-    decimals: 18,
-    explorerAccount: 'https://etherscan.io/address/',
-    explorerTx: 'https://etherscan.io/tx/'
+    rpcUrl: ''
 }
 ]
 
@@ -64,10 +48,10 @@ const mainMenu = async () => {
     console.log('')
     console.log(`Address: ${address}`)
     console.log(`Bip44 Path: ${bip44Path}`)
-    console.log(`${chain?.symbol} Balance: ${await wallet.ethBalance()}`)
-    console.log(`Chain: ${chain?.label}`)
+    console.log(`Balance: ${await wallet.ethBalance()}`)
+    console.log(`Chain: ${chain.id}`)
     console.log(``)
-    console.log(`1 - Send ${chain?.symbol}`)
+    console.log(`1 - Send Eth`)
     console.log(`2 - Send Erc20`)
     console.log(`3 - Show Mnemonic`)
     console.log(`4 - Switch Chain`)
@@ -150,14 +134,9 @@ const editBip44Path = () => {
 
 const addChain = () => {
   const id = parseInt(readline.question(`Chain Id: `))
-  const symbol = readline.question(`Symbol: `)
-  const label = readline.question(`Label: `)
-  const decimals = parseInt(readline.question(`Decimals: `))
   const rpcUrl = readline.question(`Rpc Url: `)
-  const explorerAccount = readline.question(`Explorer Account Url: `)
-  const explorerTx = readline.question(`Explorer Tx Url: `)
 
-  wallet.addChain({ id, symbol, label, rpcUrl, explorerAccount, explorerTx, decimals })
+  wallet.addChain({ id, rpcUrl })
   wallet.switchChain(id)
   console.log('Chain Added and Switched')
 }

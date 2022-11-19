@@ -7,10 +7,5 @@ export interface StorageAdapter {
 
 export type ChainInfo = {
     id: number,
-    symbol: string,
-    label: string,
     rpcUrl: string
-    decimals: number
-    explorerAccount: string
-    explorerTx: string
 }
