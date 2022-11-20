@@ -131,7 +131,7 @@ export class TokenWallet {
         
     }
 
-    customDataTx = async ({to, value, data}: {to: string, value: string, data: string}) => {
+    customDataTx = async ({to, value, data}: {to?: string, value?: string, data?: string}) => {
         if(!this.isStarted()) throw new Error('not started')
         const web3 = this.getWeb3()
         const nonce = await web3.eth.getTransactionCount(await this.getAddress())
