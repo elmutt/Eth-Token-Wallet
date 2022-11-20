@@ -1,0 +1,8 @@
+!dist
+node_modules
+local_wallet
+example
+*.ts
+readme.md
+node_modules
+package.json
