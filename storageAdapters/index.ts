@@ -1,3 +1,5 @@
 export * from './BrowserStore'
 export * from './MemoryStore'
-export * from './NodeLocalStore'
+
+// makes react apps not happy
+// export * from './NodeLocalStore'

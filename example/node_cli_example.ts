@@ -1,5 +1,5 @@
 import { TokenWallet } from '..'
-import { NodeLocalStore } from '../index'
+import { NodeLocalStore } from '../storageAdapters/NodeLocalStore'
 import { ChainInfo } from '../utils/types'
 const readline = require('readline-sync')
 

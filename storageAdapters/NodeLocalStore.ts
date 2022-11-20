@@ -2,7 +2,7 @@ import { StorageAdapter, StorageValue } from '../utils/types'
 import { LocalStorage } from 'node-localstorage'
 
 export class NodeLocalStore implements StorageAdapter {
-    localStorage: LocalStorage
+    localStorage: typeof LocalStorage
     constructor(storeFileName) {
         this.localStorage = new LocalStorage(`${storeFileName}`);
     }

@@ -3,6 +3,7 @@ node_modules
 local_wallet
 example
 *.ts
+!*.d.ts
 readme.md
 node_modules
 package.json
