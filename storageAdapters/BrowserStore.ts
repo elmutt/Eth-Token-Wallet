@@ -4,9 +4,10 @@ export class BrowserStore implements StorageAdapter {
     // TODO
     store: any = {}
     setValue(key: string, value: StorageValue) {
-        this.store[key] = value
+        window.localStorage.setItem(key, value as string)
     }
     getValue(key: string) {
-        return this.store[key]
+        const value = window.localStorage.getItem(key) as string
+        return value
     }
 }

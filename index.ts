@@ -10,6 +10,8 @@ const SUPPORTED_CHAINS_KEY = 'supportedChains'
 const CURRENT_CHAINID_KEY = 'lastChainId'
 const BIP44_PATH_KEY = 'bip44Path'
 
+export * from './storageAdapters/index'
+
 export class TokenWallet {
     mnemonic: string
     storageAdapter: StorageAdapter
