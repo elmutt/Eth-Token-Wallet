@@ -1,6 +1,6 @@
 {
   "name": "eth-token-wallet",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Basic wallet functionality (eth / erc20) on any evm chain",
   "main": "./dist/index.js",
   "repository": "https://github.com/elmutt/Eth-Token-Wallet.git",
@@ -9,6 +9,7 @@
   "private": false,
   "dependencies": {
     "bip39": "^3.0.4",
+    "crypto-browserify": "^3.12.0",
     "eth_mnemonic_signer": "^1.0.4",
     "ethers": "^5.7.2",
     "node-localstorage": "^2.2.1",

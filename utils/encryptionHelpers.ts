@@ -3,7 +3,7 @@ import {
   randomBytes,
   createDecipheriv,
   scryptSync
-} from 'crypto'
+} from 'crypto-browserify'
 
 const algorithm = 'aes-256-ctr'
 const salt = '23sdfwa34vaerrtaertvsrde43tqsdgf'
