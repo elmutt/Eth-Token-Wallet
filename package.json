@@ -1,6 +1,6 @@
 {
   "name": "eth-token-wallet",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Basic wallet functionality (eth / erc20) on any evm chain",
   "main": "./dist/index.js",
   "repository": "https://github.com/elmutt/Eth-Token-Wallet.git",
@@ -16,7 +16,7 @@
     "web3": "^1.8.1"
   },
   "scripts": {
-    "build": "tsc index.ts example/node_cli_example.ts --outDir dist",
+    "build": "rm -rf dist && tsc index.ts example/node_cli_example.ts --outDir dist -d",
     "example": "yarn && yarn build && node ./dist/example/node_cli_example.js"
   }
 }
