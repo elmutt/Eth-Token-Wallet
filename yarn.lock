@@ -1098,10 +1098,10 @@ eth-lib@^0.1.26:
     ws "^3.0.0"
     xhr-request-promise "^0.1.2"
 
-eth_mnemonic_signer@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/eth_mnemonic_signer/-/eth_mnemonic_signer-1.0.4.tgz#241c9b5838374b9b1ea83119b00f7d06a7dd158f"
-  integrity sha512-diXQcAsMcGfFYaN7UaMMN/KArsfDkC2Z2O8175v9CpFZ32HnUQT6teAAPptcVSHNfWK3Yow+74R8C2LjbbPWHw==
+eth_mnemonic_signer@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/eth_mnemonic_signer/-/eth_mnemonic_signer-1.0.5.tgz#3d012a119f974096cd6de68da0201c37caa32383"
+  integrity sha512-SPq4PuZo/A8b4dxwuzJKKBEzGopHN605CdRySBeQDjGnn6ZzNZv2PwRwxH9bpUCcIf9niyxo0xItwS/Et7ZV5Q==
   dependencies:
     bip39 "^3.0.4"
     ethereumjs-wallet "^1.0.2"
