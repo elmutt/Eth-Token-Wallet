@@ -1,6 +1,6 @@
 {
   "name": "eth-token-wallet",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Basic wallet functionality (eth / erc20) on any evm chain",
   "main": "./dist/index.js",
   "repository": "https://github.com/elmutt/Eth-Token-Wallet.git",

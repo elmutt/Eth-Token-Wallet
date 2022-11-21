@@ -20,25 +20,25 @@ export class TokenWallet {
         this.storageAdapter = storageAdapter
     }
 
-    start = (password: string) => {
+    start = async (password: string) => {
         if(this.isStarted()) throw new Error('already started')
         if(!this.isInitialized()) throw new Error('not initialized')
         const encryptedMnemonic = this.storageAdapter.getValue(MNEMONIC_STORAGE_KEY)
         if(!encryptedMnemonic) throw new Error('mnemonic not found')
-        this.mnemonic = decrypt(encryptedMnemonic, password)
+        this.mnemonic = await decrypt(encryptedMnemonic, password)
         if(!validateMnemonic(this.mnemonic)) throw new Error('incorrect password')
     }
 
     isStarted = () => !!this.mnemonic
 
-    initialize = (supportedChains: ChainInfo[], password: string, mnemonic?: string) => {
+    initialize = async (supportedChains: ChainInfo[], password: string, mnemonic?: string) => {
         const newMnemonic = !!mnemonic ? mnemonic : ethers.Wallet.createRandom().mnemonic.phrase
-        const encryptedMnemonic = encrypt(newMnemonic, password)
+        const encryptedMnemonic = await encrypt(newMnemonic, password)
         this.storageAdapter.setValue(MNEMONIC_STORAGE_KEY, encryptedMnemonic)
         this.storageAdapter.setValue(SUPPORTED_CHAINS_KEY, JSON.stringify(supportedChains))
         this.switchChain(supportedChains[0].id)
         this.setBip44Path(`m/44'/60'/0'/0/0`)
-        this.start(password)
+        await this.start(password)
     }
 
     setBip44Path = (newPath: string) => {

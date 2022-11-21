@@ -25,14 +25,14 @@ const wallet = new TokenWallet(store)
 const main = async () => {
   if (wallet.isInitialized()) {
     const password = readline.question('Wallet password:')
-    wallet.start(password)
+    await wallet.start(password)
   } else {
     const mnemonic = readline.question(
       'Input Mnemonic (leave blank to generate new):'
     )
     const password = readline.question('Enter a new password for this wallet:')
     console.log('initializing')
-    wallet.initialize(supportedChains, password, mnemonic)
+    await wallet.initialize(supportedChains, password, mnemonic)
     console.log('done initializing')
   }
 
