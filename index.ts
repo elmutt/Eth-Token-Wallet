@@ -149,17 +149,17 @@ export class TokenWallet {
           }
     }
 
-    erc20Balance = async ({tokenAddress, address}: {tokenAddress: string, address?: string}) => {
+    erc20Balance = async ({tokenAddress}: {tokenAddress: string}) => {
         if(!this.isStarted()) throw new Error('not started')
         const web3 = this.getWeb3()
         const erc20Contract = new (web3.eth.Contract)(erc20Abi as any, tokenAddress)
-        return erc20Contract?.methods.balanceOf(address ?? await this.getAddress()).call()
+        return erc20Contract?.methods.balanceOf(await this.getAddress()).call()
     }
 
-    ethBalance = async (address?: string) => {
+    ethBalance = async () => {
         if(!this.isStarted()) throw new Error('not started')
         const web3 = this.getWeb3()
-        return web3.eth.getBalance(address ?? await this.getAddress())
+        return web3.eth.getBalance(await this.getAddress())
     }
 
     getWeb3 = () => {
