@@ -1,6 +1,6 @@
 import { ChainInfo, StorageAdapter } from "./utils/types"
 import { decrypt, encrypt } from "./utils/encryptionHelpers"
-import { getAddress, EthTx, signTx, validateMnemonic } from 'eth_mnemonic_signer'
+import { getAddress, signTx, validateMnemonic } from 'eth_mnemonic_signer'
 import { erc20Abi } from './utils/erc20Abi'
 import { ethers } from 'ethers'
 const Web3 = require('web3')
@@ -83,7 +83,7 @@ export class TokenWallet {
         this.mnemonic = ''
     }
 
-    signAndBroadcast = async (tx: EthTx): Promise<{txid: string, confirmPromise: Promise<any>}> => {
+    signAndBroadcast = async (tx: any): Promise<{txid: string, confirmPromise: Promise<any>}> => {
         if(!this.isStarted() || !this.mnemonic) throw new Error('not started')
         const signedTx = await signTx(tx, this.mnemonic, this.getBip44Path())
         const txid = this.getWeb3().utils.sha3(signedTx)
