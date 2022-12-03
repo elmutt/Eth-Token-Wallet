@@ -171,5 +171,9 @@ export class TokenWallet {
         return web3
     }
 
+    txCount = async () => {
+        return this.getWeb3().eth.getTransactionCount(await this.getAddress())
+    }
+
     getSupportedChains = () => JSON.parse(this.storageAdapter.getValue(SUPPORTED_CHAINS_KEY))
 }
