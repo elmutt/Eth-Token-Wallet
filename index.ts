@@ -165,7 +165,6 @@ export class TokenWallet {
         const balancePromises: any[] = []
         for(let i=0;i<tokenAddresses.length;i++) {
             const tokenAddress =  tokenAddresses[i]
-            console.log('tokenAddress', tokenAddress)
             const erc20Contract = new (web3.eth.Contract)(erc20Abi as any, tokenAddress)
             balancePromises.push(erc20Contract?.methods.balanceOf(address).call())
         }
